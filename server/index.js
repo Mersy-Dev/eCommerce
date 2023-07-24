@@ -9,7 +9,11 @@ const dotenv = require('dotenv').config();
 
 
 const app = express();
-const userRoutes = require("./routes/userRoutes")
+const userRoutes = require("./routes/userRoutes");
+const productRoutes = require("./routes/productRoutes");
+
+
+
 
 
 const connectDB = require('./config/db');
@@ -24,6 +28,8 @@ app.use(cors({origin:"*"}))
 
 
 app.use("/user", userRoutes);
+app.use("/product", productRoutes);
+
 
 
 
