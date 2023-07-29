@@ -3,6 +3,7 @@ import { BiHide, BiShow } from 'react-icons/bi'
 import { Link, useNavigate } from 'react-router-dom';
 import { ImageToBase64 } from '../utility/ImageToBase64';
 import { toast } from "react-hot-toast"
+import Validation from './Validation';
 
 function SignUp() {
     const navigate = useNavigate()
@@ -40,6 +41,9 @@ function SignUp() {
     }
 
 
+    const [errors, setErrors] = useState({})
+
+
 
     const handleUploadProfileImage = async (e) => {
         // console.log(e.target.files[0])
@@ -58,8 +62,11 @@ function SignUp() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+
         const { firstName, lastName, email, password, cpassword } = data
-        if (firstName && lastName && email && password && cpassword) {
+
+        if (firstName && lastName && email && password && cpassword)
+         {
             if (password === cpassword) {
                 const fetchData = await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/user/signup`, {
                     method: "POST",
@@ -67,20 +74,26 @@ function SignUp() {
                         "content-type": "application/json"
                     },
                     body: JSON.stringify(data)
+                    
                 })
+                setErrors(Validation(data))
+
                 const resdata = await fetchData.json()
                 console.log(resdata)
                 toast(resdata.message)
+                
                 if (resdata.alert) {
-                    navigate("/login")
+                    navigate("/")
                 } else {
                     return
 
                 }
+
             }
         }
+        
         else {
-            alert("Enter required field")
+            toast("Enter required field")
         }
 
     }
@@ -119,6 +132,7 @@ function SignUp() {
                             <label htmlFor="email" >Email</label>
                             <input type="email" name="email" id="email" className='mt-1 mb-2 w-full bg-slate-200 px-2 py-1 rounded focus-within:outline-blue-300' value={data.email} onChange={handleOnChange} />
                         </div>
+                        {errors.email && <p className='text-red-500'>{errors.email} </p>}
 
                         <div >
                             <label htmlFor="password" >Password</label>
@@ -127,6 +141,8 @@ function SignUp() {
                                 <span className='flex text-xl cursor-pointer' onClick={handleShowPassword}> {showPassword ? <BiShow /> : <BiHide />}</span>
                             </div>
                         </div>
+                        {errors.password && <p className='text-red-500'>{errors.password} </p>}
+
 
                         <div >
                             <label htmlFor="cpassword" >Confirm Password</label>
@@ -135,6 +151,7 @@ function SignUp() {
                                 <span className='flex text-xl cursor-pointer' onClick={handleCpassword}> {showCpassword ? <BiShow /> : <BiHide />}</span>
                             </div>
                         </div>
+                        {errors.cpassword && <p className='text-red-500'>{errors.cpassword} </p>}
 
                         <div className='m-auto'>
                             <button className="w-full min-w-[130px] m-auto bg-blue-400 hover:bg-blue-700 cursor-pointer text-white text-xl font-medium text-center py-1 rounded-full mt-4 ">

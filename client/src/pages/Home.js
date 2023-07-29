@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import HomeCards from '../components/HomeCards'
 import { useSelector } from 'react-redux'
 import CardFeatures from '../components/CardFeatures';
-import {GrPrevious, GrNext} from 'react-icons/gr'
+import { GrPrevious, GrNext } from 'react-icons/gr'
+import FilterProduct from '../components/FilterProduct';
+import AllProduct from '../components/AllProduct';
+
+
 
 function Home() {
   const productData = useSelector((state) => state.product.productList)
@@ -14,6 +18,19 @@ function Home() {
 
 
   const loadingArray = new Array(4).fill(null)
+  const loadingArrayFeature = new Array(5).fill(null)
+
+  const slideProductRef = useRef()
+
+  const nextProduct = () => {
+    slideProductRef.current.scrollLeft += 200
+  }
+
+  const prevProduct = () => {
+    slideProductRef.current.scrollLeft -= 200
+  }
+
+
 
 
   return (
@@ -31,12 +48,13 @@ function Home() {
         </div>
 
 
-        <div className='md:w-1/2 flex flex-wrap gap-5 p-8 justify-center'>
+        <div className='md:w-1/2 flex flex-wrap gap-5 p-8 justify-center' >
           {
             homeProductCartList[0] ? homeProductCartList.map(el => {
               return (
                 <HomeCards
                   key={el._id}
+                  id={el._id}
                   image={el.image}
                   name={el.name}
                   price={el.price}
@@ -62,17 +80,18 @@ function Home() {
         <div className='flex w-full items-center'>
           <h2 className='font-bold text-2xl text-slate-700 mb-4'>Fresh Vegetables</h2>
           <div className='ml-auto flex gap-4'>
-            <button className='bg-slate-300 hover:bg-slate-500 text-lg'><GrPrevious/></button>
-            <button className='bg-slate-300 hover:bg-slate-500 text-lg'><GrNext/></button>
+            <button onClick={prevProduct} className='bg-slate-300 hover:bg-slate-500 text-lg p-1 rounded'><GrPrevious /></button>
+            <button onClick={nextProduct} className='bg-slate-300 hover:bg-slate-500 text-lg p-1 rounded'><GrNext /></button>
 
           </div>
         </div>
-        <div className='flex gap-5 overflow-scroll'>
-          {
+        <div className='flex gap-5 overflow-scroll scrollbar-none scroll-smooth transition-all' ref={slideProductRef}>
+          {homeProductCartListVages[0] ?
             homeProductCartListVages.map(el => {
               return (
                 <CardFeatures
                   key={el._id}
+                  id={el._id}
                   name={el.name}
                   category={el.category}
                   price={el.price}
@@ -80,13 +99,18 @@ function Home() {
 
                 />
 
-              )
+              );
             })
+            :
+            loadingArrayFeature.map((el, index) => (<CardFeatures loading="Loading..." key={index}/>))
           }
         </div>
       </div>
+
+          <AllProduct heading={"All Product"}/>
+      
     </div>
-  )
-}
+  );
+};
 
 export default Home

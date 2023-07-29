@@ -88,7 +88,6 @@ const NewProduct = () => {
           <label htmlFor="category">Category</label>
           <select className='bg-slate-200 p-1 my-1' id="category" name='category' onChange={handleOnchanged} value={data.category}>
             <option value={"others"}>Select Caegory</option>
-            <option value={"food"}>Food</option>
             <option value={"fruits"}>Fruits</option>
             <option value={"vegetables"}>Vegetables</option>
             <option value={"beverages"}>Beverages</option>
@@ -100,6 +99,16 @@ const NewProduct = () => {
             <option value={"crunchy"}>Crunchy</option>
             <option value={"salad"}>Salad</option>
             <option value={"fruitsalad"}>Fruit Salad</option>
+            <option value={"fries"}>fries</option>
+            <option value={"baked"}>Baked</option>
+            <option value={"meat"}>Meat</option>
+            <option value={"appt"}>Appetizers</option>
+            <option value={"sandw"}>Sandwishes</option>
+
+
+
+
+
 
 
 
